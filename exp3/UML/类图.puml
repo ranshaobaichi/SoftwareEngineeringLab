@@ -1,0 +1,76 @@
+@startuml 类图
+package "模型" {
+class User {
+- userId: UUID
+- email: String
+- phone: String
+- passwordHash: String
+- nickname: String
+- avatarPath: String
++ register()
++ login()
++ logout()
+}
+
+
+class Entry {
+- entryId: UUID
+- title: String
+- amount: Decimal
+- currency: String
+- note: String
+- timestamp: DateTime
+- images: List<String>
++ addTag(tag: Tag)
++ removeTag(tag: Tag)
+}
+
+
+class Category {
+- categoryId: UUID
+- name: String
+- type: Enum{INCOME, EXPENSE}
++ rename(newName: String)
+}
+
+
+class Tag {
+- tagId: UUID
+- name: String
++ mergeWith(t: Tag)
+}
+
+
+class Budget {
+- budgetId: UUID
+- period: Enum{DAILY, MONTHLY, YEARLY}
+- limitAmount: Decimal
+- thresholdPercent: Int
++ isExceeded(currentAmount: Decimal): Boolean
+}
+
+
+class Database {
+- dbPath: String
++ saveEntry(e: Entry)
++ deleteEntry(id: UUID)
++ queryEntries(filter): List<Entry>
+}
+
+
+class ExportService {
++ exportToXlsx(entries: List<Entry>, path: String)
+}
+}
+
+
+User "1" -- "*" Entry : owns >
+Entry "*" -- "*" Tag : tagged >
+Entry "*" -- "1" Category : belongs to >
+Category "1" -- "*" Tag : suggested tags >
+Budget "1" -- "*" User : applies to >
+Database ..> Entry : persists >
+ExportService ..> Database : reads >
+
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml 时序图
+actor User
+participant UI
+participant AppLogic
+participant Database
+participant StatEngine
+
+
+User -> UI: 填写账目信息并提交()
+UI -> AppLogic: submitEntry(entryData)
+AppLogic -> Database: saveEntry(entry)
+Database --> AppLogic: saveResult(success)
+AppLogic -> StatEngine: updateStatistics(entry)
+StatEngine --> AppLogic: statsUpdated
+AppLogic --> UI: submitResult(success)
+UI -> User: 显示保存成功
+
+
+@enduml

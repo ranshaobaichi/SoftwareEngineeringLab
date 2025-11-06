@@ -1,0 +1,24 @@
+@startuml UML用例图
+left to right direction
+actor User
+boundary System
+
+
+User --> (注册)
+User --> (登录)
+User --> (管理个人信息)
+User --> (添加账目)
+User --> (编辑/删除账目)
+User --> (查看账单)
+User --> (筛选账单)
+User --> (查看统计)
+User --> (设置预算提醒)
+User --> (导出为Excel)
+
+
+note right of (导出为Excel)
+导出当前筛选结果为 .xlsx
+end note
+
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml 组件图
+package "PocketLedger" {
+[UI] --> [AppLogic]
+[AppLogic] --> [Database]
+[AppLogic] --> [StatEngine]
+[AppLogic] --> [ExportService]
+[AppLogic] --> [AuthService]
+[AuthService] --> [Database]
+}
+
+
+@enduml

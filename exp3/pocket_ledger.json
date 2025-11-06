@@ -1,0 +1,106 @@
+{
+  "users": {},
+  "entries": {},
+  "categories": {
+    "b27c8a07-c10b-49dc-9748-0a4f4d64a376": {
+      "category_id": "b27c8a07-c10b-49dc-9748-0a4f4d64a376",
+      "name": "餐饮",
+      "type": "expense",
+      "icon": "🍔",
+      "description": null
+    },
+    "976e0a86-7b47-4188-9dc8-355b12a5b2c1": {
+      "category_id": "976e0a86-7b47-4188-9dc8-355b12a5b2c1",
+      "name": "购物",
+      "type": "expense",
+      "icon": "🛍️",
+      "description": null
+    },
+    "1453089a-23e0-4629-aaf0-e7e7f766ea2f": {
+      "category_id": "1453089a-23e0-4629-aaf0-e7e7f766ea2f",
+      "name": "交通",
+      "type": "expense",
+      "icon": "🚗",
+      "description": null
+    },
+    "01896a02-f459-456e-b561-88331c8c702a": {
+      "category_id": "01896a02-f459-456e-b561-88331c8c702a",
+      "name": "娱乐",
+      "type": "expense",
+      "icon": "🎮",
+      "description": null
+    },
+    "2d7b66ac-ebaf-4edf-aaef-883e3bb54167": {
+      "category_id": "2d7b66ac-ebaf-4edf-aaef-883e3bb54167",
+      "name": "医疗",
+      "type": "expense",
+      "icon": "💊",
+      "description": null
+    },
+    "c62091e7-f928-42a2-8bc9-e736f56ddd16": {
+      "category_id": "c62091e7-f928-42a2-8bc9-e736f56ddd16",
+      "name": "教育",
+      "type": "expense",
+      "icon": "📚",
+      "description": null
+    },
+    "b88f5375-f516-45c1-ad19-8f94772af3b2": {
+      "category_id": "b88f5375-f516-45c1-ad19-8f94772af3b2",
+      "name": "住房",
+      "type": "expense",
+      "icon": "🏠",
+      "description": null
+    },
+    "4b3cdc3b-cddb-47af-9e40-743272895c8e": {
+      "category_id": "4b3cdc3b-cddb-47af-9e40-743272895c8e",
+      "name": "通讯",
+      "type": "expense",
+      "icon": "📱",
+      "description": null
+    },
+    "63f9483c-bd3b-431c-93c9-20a99a669157": {
+      "category_id": "63f9483c-bd3b-431c-93c9-20a99a669157",
+      "name": "其他支出",
+      "type": "expense",
+      "icon": "💸",
+      "description": null
+    },
+    "4122fefa-145b-4638-8dac-10f4adf84408": {
+      "category_id": "4122fefa-145b-4638-8dac-10f4adf84408",
+      "name": "工资",
+      "type": "income",
+      "icon": "💰",
+      "description": null
+    },
+    "b144416c-c204-4461-bb43-4fb917d4c360": {
+      "category_id": "b144416c-c204-4461-bb43-4fb917d4c360",
+      "name": "奖金",
+      "type": "income",
+      "icon": "🎁",
+      "description": null
+    },
+    "cf5b0078-efa4-42e0-b36f-9177179504bb": {
+      "category_id": "cf5b0078-efa4-42e0-b36f-9177179504bb",
+      "name": "投资收益",
+      "type": "income",
+      "icon": "📈",
+      "description": null
+    },
+    "e40fb4cf-26b9-4836-8498-7dadb1212bf4": {
+      "category_id": "e40fb4cf-26b9-4836-8498-7dadb1212bf4",
+      "name": "兼职",
+      "type": "income",
+      "icon": "💼",
+      "description": null
+    },
+    "d67cbaac-2a3e-4bb9-ae16-f0d48c215179": {
+      "category_id": "d67cbaac-2a3e-4bb9-ae16-f0d48c215179",
+      "name": "其他收入",
+      "type": "income",
+      "icon": "💵",
+      "description": null
+    }
+  },
+  "tags": {},
+  "budgets": {}
+}
