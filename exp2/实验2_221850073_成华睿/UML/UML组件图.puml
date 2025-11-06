@@ -1,0 +1,49 @@
+@startuml "组件图 - 任务单App"
+
+' 定义组件
+component "任务单App" {
+  node "提醒与通知模块" as ReminderNotification {
+    artifact ReminderService
+    artifact Notification
+  }
+  node "任务管理模块" as TaskManagement {
+    artifact Task
+    artifact TaskCategory
+    artifact TaskTag
+    artifact TaskTimeline
+  }
+  node "任务属性模块" as TaskAttributes {
+    artifact TaskAttribute
+    artifact PriorityWeightingSystem
+  }
+  node "用户界面模块" as UserInterface {
+    artifact UIStyle
+    artifact UITheme
+  }
+  node "帮助与支持模块" as HelpSupport {
+    artifact HelpDocument
+    artifact Tutorial
+  }
+  node "用户交互模块" as UserInteraction {
+    artifact UserAction
+  }
+}
+
+' 定义外部实体
+node "用户" as User
+node "手机日程应用" as CalendarApp
+
+' 定义组件之间的关系
+"任务单App" --> "用户" : 使用
+"任务单App" --> "手机日程应用" : 集成
+
+' 定义模块之间的关系
+"提醒与通知模块" --> "任务管理模块" : 依赖
+"任务管理模块" --> "任务属性模块" : 依赖
+"任务管理模块" --> "用户界面模块" : 依赖
+"任务属性模块" --> "用户界面模块" : 依赖
+"用户界面模块" --> "用户交互模块" : 依赖
+"用户交互模块" --> "任务管理模块" : 依赖
+"帮助与支持模块" --> "用户界面模块" : 依赖
+
+@enduml

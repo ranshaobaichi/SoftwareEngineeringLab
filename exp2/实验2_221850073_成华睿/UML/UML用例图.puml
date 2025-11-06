@@ -1,0 +1,40 @@
+@startuml "用例图 - 任务单App"
+
+' 定义参与者
+actor 用户 as user
+
+' 定义用例
+usecase "设置DDL提醒" as UC001
+usecase "自定义提醒时间与方式" as UC002
+usecase "任务归类与标签设计" as UC003
+usecase "按时间排序分块显示任务" as UC004
+usecase "区分日程与日常任务" as UC005
+usecase "设置重复任务" as UC006
+usecase "选择任务重要性与难度" as UC007
+usecase "优先级加权系统" as UC008
+usecase "选择UI风格" as UC009
+usecase "查看帮助文档与教程" as UC010
+usecase "任务统计与归档" as UC011
+usecase "增加、删除、修改任务" as UC012
+
+' 定义参与者与用例之间的关系
+user --> UC001
+user --> UC002
+user --> UC003
+user --> UC004
+user --> UC005
+user --> UC006
+user --> UC007
+user --> UC008
+user --> UC009
+user --> UC010
+user --> UC011
+user --> UC012
+
+' 定义用例之间的关系
+UC001 .> UC002 : 扩展
+UC003 .> UC004 : 扩展
+UC005 .> UC006 : 扩展
+UC007 .> UC008 : 扩展
+
+@enduml

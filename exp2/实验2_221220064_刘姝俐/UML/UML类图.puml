@@ -1,0 +1,52 @@
+@startuml
+class Task {
+    - title: string
+    - deadline: date
+    - priority: int
+    - tags: list<string>
+    + create(): void
+    + edit(): void
+    + delete(): void
+}
+
+class User {
+    - name: string
+    - tasks: list<Task>
+    + addTask(task: Task): void
+    + removeTask(task: Task): void
+}
+
+class Notification {
+    - type: string
+    - time: datetime
+    - message: string
+    + sendNotification(): void
+}
+
+class TaskManager {
+    + parseDDL(input: string): Task
+    + createTaskFromNLP(input: string): Task
+    + planTasks(): void
+    + markTaskAsCompleted(task: Task): void
+}
+
+class TimeLine {
+    + displayTasks(): void
+    + trackProgress(task: Task): void
+    + customizeView(): void
+}
+
+class UICustomization {
+    - themeColor: string
+    - fontSize: int
+    - backgroundImage: string
+    + setThemeColor(color: string): void
+    + setFontSize(size: int): void
+    + setBackgroundImage(image: string): void
+}
+
+User "1" -- "*" Task : owns >
+User "1" -- "*" Notification : receives >
+TaskManager -- "1" TimeLine : manages >
+UICustomization -- "1" User : customizes >
+@enduml

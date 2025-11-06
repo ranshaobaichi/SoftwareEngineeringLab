@@ -1,0 +1,21 @@
+@startuml
+actor User
+participant "UserAction" as UA
+participant "Task" as T
+participant "TaskAttribute" as TA
+participant "PriorityWeightingSystem" as PWS
+participant "UIStyle" as US
+participant "HelpDocument" as HD
+
+User -> UA: createTask(task: Task)
+UA -> T: perform
+T -> TA: describes
+TA -> PWS: calculatePriority(task: Task)
+
+User -> UA: deleteTask(task: Task)
+User -> UA: updateTask(task: Task)
+
+User -> US: applyStyle(style: string)
+
+User -> HD: view
+@enduml

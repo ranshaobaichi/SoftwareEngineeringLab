@@ -1,0 +1,66 @@
+@startuml
+actor User
+participant App
+participant Task
+participant Storage
+participant NLP
+
+User -> App: 上传图片/文档或提供链接
+App -> NLP: 解析截止日期（DDL）
+NLP -> App: 返回DDL信息
+App -> Task: 创建任务
+Task -> Storage: 保存任务
+Storage -> Task: 确认保存
+Task -> App: 确认任务创建
+App -> User: 显示任务列表
+
+User -> App: 手动添加新任务
+App -> Task: 设置截止日期、提醒时间、优先级和标签
+Task -> Storage: 保存任务
+Storage -> Task: 确认保存
+Task -> App: 确认任务创建
+App -> User: 显示任务列表
+
+User -> App: 编辑任务
+App -> Task: 获取任务详情
+Task -> App: 返回任务详情
+App -> User: 显示任务编辑界面
+User -> App: 提交编辑后的任务
+App -> Task: 更新任务信息
+Task -> Storage: 保存更新
+Storage -> Task: 确认保存
+Task -> App: 确认更新
+App -> User: 显示更新后的任务列表
+
+User -> App: 删除任务
+App -> Task: 获取任务详情
+Task -> App: 返回任务详情
+App -> User: 确认删除
+User -> App: 确认
+App -> Task: 删除任务
+Task -> Storage: 删除任务
+Storage -> Task: 确认删除
+Task -> App: 确认删除
+App -> User: 显示更新后的任务列表
+
+User -> App: 设置周期性重复任务
+App -> Task: 设置周期性属性
+Task -> Storage: 保存任务
+Storage -> Task: 确认保存
+Task -> App: 确认设置
+App -> User: 显示任务列表
+
+User -> App: 标记任务为已完成
+App -> Task: 更新任务状态
+Task -> Storage: 保存更新
+Storage -> Task: 确认保存
+Task -> App: 确认状态更新
+App -> User: 显示更新后的任务列表
+
+User -> App: 查看任务时间线
+App -> Task: 获取任务列表和进度
+Task -> Storage: 获取数据
+Storage -> Task: 返回数据
+Task -> App: 显示时间线视图
+App -> User: 显示时间线视图
+@enduml

@@ -1,0 +1,34 @@
+@startuml
+component "Task Management App" {
+    component "Task Creation" {
+        component "Automatic Task Creation"
+        component "Manual Task Creation"
+    }
+    component "Task Management" {
+        component "Task Editing"
+        component "Task Deletion"
+    }
+    component "Natural Language Processing" {
+        component "Voice Input"
+        component "Text Input"
+    }
+    component "Task Planning" {
+        component "Daily Planning"
+        component "Recurring Tasks"
+        component "Task Completion Marking"
+    }
+    component "User Experience" {
+        component "Custom Notifications"
+        component "UI Customization"
+    }
+    component "Task Timeline" {
+        component "Visual Representation"
+        component "Progress Tracking"
+    }
+}
+
+"Task Creation" --> "Task Management" : uses >
+"Natural Language Processing" --> "Task Creation" : uses >
+"Task Planning" --> "Task Timeline" : uses >
+"User Experience" --> "Task Management App" : enhances >
+@enduml

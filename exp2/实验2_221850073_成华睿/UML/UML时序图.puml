@@ -1,0 +1,23 @@
+@startuml
+actor User
+participant "ReminderService" as RS
+participant "Notification" as N
+participant "Task" as T
+participant "TaskAttribute" as TA
+participant "PriorityWeightingSystem" as PWS
+participant "UIStyle" as US
+
+User -> RS: scheduleReminder(time: DateTime, method: NotificationMethod)
+RS -> N: schedules
+N -> T: perform
+
+User -> T: createTask(task: Task)
+T -> TA: describes
+TA -> PWS: calculates
+PWS -> T: calculatesPriority(task: Task)
+
+User -> T: deleteTask(task: Task)
+User -> T: updateTask(task: Task)
+
+User -> US: applyStyle(style: string)
+@enduml

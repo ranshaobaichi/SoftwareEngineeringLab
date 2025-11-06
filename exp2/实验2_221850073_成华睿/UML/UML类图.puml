@@ -1,0 +1,72 @@
+@startuml "UML类图 - 任务单App"
+
+' 提醒与通知模块（Reminder and Notification Module）
+class ReminderService as "提醒服务\nReminderService" {
+    +scheduleReminder(time: DateTime, method: NotificationMethod)
+}
+class Notification as "通知\nNotification" {
+    -time: DateTime
+    -method: NotificationMethod
+}
+
+' 任务管理模块（Task Management Module）
+class Task as "任务\nTask" {
+    -id: int
+    -name: string
+    -description: string
+    -category: TaskCategory
+    -tags: List<TaskTag>
+}
+class TaskCategory as "任务分类\nTaskCategory" {
+    -name: string
+}
+class TaskTag as "任务标签\nTaskTag" {
+    -name: string
+    -color: string
+    -style: string
+}
+class TaskTimeline as "任务时间线\nTaskTimeline" {
+    -tasks: List<Task>
+}
+
+' 任务属性模块（Task Attributes Module）
+class TaskAttribute as "任务属性\nTaskAttribute" {
+    -importance: int
+    -difficulty: int
+}
+class PriorityWeightingSystem as "优先级加权系统\nPriorityWeightingSystem" {
+    +calculatePriority(task: Task): int
+}
+
+' 用户界面模块（User Interface Module）
+class UIStyle as "用户界面风格\nUIStyle" {
+    +applyStyle(style: string)
+}
+class UITheme as "用户界面主题\nUITheme" {
+    -name: string
+}
+
+' 帮助与支持模块（Help and Support Module）
+class HelpDocument as "帮助文档\nHelpDocument" {
+}
+class Tutorial as "使用教程\nTutorial" {
+}
+
+' 用户交互模块（User Interaction Module）
+class UserAction as "用户操作\nUserAction" {
+    +createTask(task: Task)
+    +deleteTask(task: Task)
+    +updateTask(task: Task)
+}
+
+' 关系
+ReminderService "1" -- "1..*" Notification : schedules >
+Task "1" -- "1..*" TaskTag : has >
+Task "1" -- "1" TaskCategory : belongs_to >
+TaskTimeline "1" -- "1..*" Task : contains >
+TaskAttribute "1" -- "1" Task : describes >
+PriorityWeightingSystem "1" -- "1" Task : calculates >
+UIStyle "1" -- "1" UITheme : uses >
+UserAction "1" -- "1" Task : performs >
+
+@enduml
