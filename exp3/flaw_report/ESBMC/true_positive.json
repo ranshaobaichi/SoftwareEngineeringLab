@@ -1,0 +1,9 @@
+{
+  "1": {
+    "CWE": "CWE-125",
+    "name": "MissingPrecondition_UpdatePassword",
+    "File": "exp3/pocket_ledger/models/user.py",
+    "Line": "(update_password)",
+    "At": "update_password allowed empty old_password; CrossHair found precondition chain-break"
+  }
+}

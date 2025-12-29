@@ -6,7 +6,6 @@ from enum import Enum
 from typing import Optional
 from decimal import Decimal
 
-
 class BudgetPeriod(Enum):
     """预算周期枚举"""
     DAILY = "daily"  # 每日

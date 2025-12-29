@@ -1,0 +1,23 @@
+{
+  "1": {
+    "CWE": "CWE-699",
+    "name": "TooFewPublicMethods",
+    "File": "exp3/main.py",
+    "Line": "16",
+    "At": "R0903: Too few public methods (1/2) - considered stylistic"
+  },
+  "2": {
+    "CWE": "CWE-710",
+    "name": "TooManyPublicMethods",
+    "File": "exp3/pocket_ledger/app_logic.py",
+    "Line": "20",
+    "At": "R0904: Too many public methods (24/20) - application design choice"
+  },
+  "3": {
+    "CWE": "CWE-561",
+    "name": "TrailingWhitespace",
+    "File": "exp3/pocket_ledger/ui_interface.py",
+    "Line": "21",
+    "At": "Trailing whitespace warnings often low-value for functionality"
+  }
+}

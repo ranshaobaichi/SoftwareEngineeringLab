@@ -1,0 +1,23 @@
+{
+  "1": {
+    "CWE": "CWE-918",
+    "name": "ConsoleEmojiIssue",
+    "File": "exp3/pocket_ledger/ui_interface.py",
+    "Line": "189",
+    "At": "Using emoji in console output — low-severity/display issue, not always a bug"
+  },
+  "2": {
+    "CWE": "CWE-693",
+    "name": "ClearAllDataNoConfirmation",
+    "File": "exp3/pocket_ledger/database/database.py",
+    "Line": "240",
+    "At": "clear_all_data has no confirmation — may be design choice rather than vulnerability"
+  },
+  "3": {
+    "CWE": "CWE-362",
+    "name": "ConcurrencyConcern_Export",
+    "File": "exp3/pocket_ledger/services/export_service.py",
+    "Line": "139",
+    "At": "Re-instantiating StatEngine in export may be an inefficiency, not a correctness bug"
+  }
+}

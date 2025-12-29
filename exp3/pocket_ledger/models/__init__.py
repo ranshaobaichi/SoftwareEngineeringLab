@@ -1,6 +1,5 @@
 """
-PocketLedger 模型层
-包含所有核心数据模型
+PocketLedger Models - Core Data Models
 """
 
 from .user import User

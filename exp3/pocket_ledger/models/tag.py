@@ -1,8 +1,7 @@
-"""
-标签模型
-"""
+"""Tag Model"""
 import uuid
 from typing import Optional
+from icontract import require, ensure
 
 
 class Tag:
@@ -16,6 +15,9 @@ class Tag:
         description: 标签描述(可选)
     """
     
+    @require(lambda name: len(name.strip()) > 0)
+    @ensure(lambda self: self.tag_id is not None)
+    @ensure(lambda self: self.color is not None)
     def __init__(
         self,
         name: str,
@@ -37,15 +39,15 @@ class Tag:
         self.color = color or "#808080"  # 默认灰色
         self.description = description
     
+    @require(lambda new_name: new_name is not None and len(new_name.strip()) > 0, "Tag name cannot be empty")
+    @ensure(lambda self: len(self.name.strip()) > 0)
     def rename(self, new_name: str) -> None:
         """
-        重命名标签
+        Rename tag
         
         Args:
-            new_name: 新的标签名称
+            new_name: New tag name
         """
-        if not new_name or not new_name.strip():
-            raise ValueError("标签名称不能为空")
         self.name = new_name.strip()
     
     def update_color(self, new_color: str) -> None:

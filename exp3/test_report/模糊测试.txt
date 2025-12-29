@@ -1,0 +1,14 @@
+(.venv) PS D:\Junior\First\Software\exp3> pytest tests/fuzz_test_query_entries.py -q --hypothesis-show-statistics
+>> 
+.                                                                                                                                                                   [100%]
+========================================================================= Hypothesis Statistics ==========================================================================
+tests/fuzz_test_query_entries.py::test_fuzz_query_entries:
+
+  - during generate phase (3.52 seconds):
+    - Typical runtimes: ~ 4-7 ms, of which ~ 0-1 ms in data generation
+    - 500 passing examples, 0 failing examples, 26 invalid examples
+
+  - Stopped because settings.max_examples=500
+
+
+1 passed in 3.57s

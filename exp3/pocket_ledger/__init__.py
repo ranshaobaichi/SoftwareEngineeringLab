@@ -1,5 +1,5 @@
 """
-PocketLedger - 个人记账软件
+PocketLedger - Personal Accounting Software
 """
 
 __version__ = "1.0.0"

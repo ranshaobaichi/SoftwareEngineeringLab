@@ -1,9 +1,8 @@
-"""
-分类模型
-"""
+"""Category Model"""
 import uuid
 from enum import Enum
 from typing import Optional
+from icontract import require, ensure
 
 
 class CategoryType(Enum):
@@ -24,6 +23,9 @@ class Category:
         description: 分类描述(可选)
     """
     
+    @require(lambda name: len(name.strip()) > 0)
+    @ensure(lambda self: self.category_id is not None)
+    @ensure(lambda self: len(self.name.strip()) > 0)
     def __init__(
         self,
         name: str,
@@ -48,15 +50,15 @@ class Category:
         self.icon = icon
         self.description = description
     
+    @require(lambda new_name: new_name is not None and len(new_name.strip()) > 0, "Category name cannot be empty")
+    @ensure(lambda self: len(self.name.strip()) > 0)
     def rename(self, new_name: str) -> None:
         """
-        重命名分类
+        Rename category
         
         Args:
-            new_name: 新的分类名称
+            new_name: New category name
         """
-        if not new_name or not new_name.strip():
-            raise ValueError("分类名称不能为空")
         self.name = new_name.strip()
     
     def update_icon(self, new_icon: str) -> None:

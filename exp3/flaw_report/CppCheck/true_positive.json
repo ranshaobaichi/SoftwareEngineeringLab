@@ -1,0 +1,72 @@
+{
+  "1": {
+    "CWE": "CWE-561",
+    "name": "TrailingWhitespace",
+    "File": "exp3/demo.py",
+    "Line": "17",
+    "At": "(trailing whitespace reported)"
+  },
+  "2": {
+    "CWE": "CWE-1283",
+    "name": "TooManyLocalVariables",
+    "File": "exp3/demo.py",
+    "Line": "12",
+    "At": "Too many local variables (22/15)"
+  },
+  "3": {
+    "CWE": "CWE-703",
+    "name": "TooManyStatements",
+    "File": "exp3/demo.py",
+    "Line": "12",
+    "At": "Too many statements (74/50)"
+  },
+  "4": {
+    "CWE": "CWE-252",
+    "name": "UnusedVariable",
+    "File": "exp3/demo.py",
+    "Line": "55",
+    "At": "Unused variable 'expenses_data'"
+  },
+  "5": {
+    "CWE": "CWE-703",
+    "name": "LineTooLong",
+    "File": "exp3/main.py",
+    "Line": "264",
+    "At": "Line too long (105/100)"
+  },
+  "6": {
+    "CWE": "CWE-703",
+    "name": "TooManyLocalVariables",
+    "File": "exp3/main.py",
+    "Line": "120",
+    "At": "Too many local variables (16/15)"
+  },
+  "7": {
+    "CWE": "CWE-391",
+    "name": "BareExcept",
+    "File": "exp3/demo.py",
+    "Line": "169",
+    "At": "No exception type(s) specified (bare-except)"
+  },
+  "8": {
+    "CWE": "CWE-561",
+    "name": "UnusedImport",
+    "File": "exp3/main.py",
+    "Line": "5",
+    "At": "Unused import sys"
+  },
+  "9": {
+    "CWE": "CWE-546",
+    "name": "UnusedArgument",
+    "File": "exp3/test_pocket_ledger.py",
+    "Line": "203",
+    "At": "Unused variable 'msg'"
+  },
+  "10": {
+    "CWE": "CWE-561",
+    "name": "TrailingWhitespace",
+    "File": "exp3/pocket_ledger/app_logic.py",
+    "Line": "30",
+    "At": "(trailing whitespace reported)"
+  }
+}

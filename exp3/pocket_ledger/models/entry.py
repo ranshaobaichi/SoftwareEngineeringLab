@@ -1,10 +1,9 @@
-"""
-账目条目模型
-"""
+"""Entry Model"""
 import uuid
 from typing import List, Optional
 from datetime import datetime
 from decimal import Decimal
+from icontract import require, ensure
 
 from .category import Category
 from .tag import Tag
@@ -27,6 +26,11 @@ class Entry:
         tags: 标签列表
     """
     
+    @require(lambda title: len(title.strip()) > 0)
+    @require(lambda amount: Decimal(str(amount)) > 0)
+    @require(lambda currency: len(currency) > 0)
+    @ensure(lambda self: self.entry_id is not None)
+    @ensure(lambda self: self.amount > 0)
     def __init__(
         self,
         user_id: uuid.UUID,
@@ -127,12 +131,14 @@ class Entry:
             return True
         return False
     
+    @require(lambda new_amount: Decimal(str(new_amount)) > 0)
+    @ensure(lambda self: self.amount > 0)
     def update_amount(self, new_amount: Decimal) -> None:
         """
-        更新金额
+        Update amount
         
         Args:
-            new_amount: 新金额
+            new_amount: New amount
         """
         self.amount = Decimal(str(new_amount))
         self.updated_at = datetime.now()

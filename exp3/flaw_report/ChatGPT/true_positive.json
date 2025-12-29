@@ -1,0 +1,72 @@
+{
+  "1": {
+    "CWE": "CWE-327",
+    "name": "WeakPasswordHashing",
+    "File": "exp3/pocket_ledger/services/auth_service.py",
+    "Line": "29",
+    "At": "Using single SHA256 without salt or iterations"
+  },
+  "2": {
+    "CWE": "CWE-252",
+    "name": "UnreachableValidationCode",
+    "File": "exp3/pocket_ledger/services/auth_service.py",
+    "Line": "148",
+    "At": "_validate_phone has an early 'return True' making regex unreachable"
+  },
+  "3": {
+    "CWE": "CWE-362",
+    "name": "RaceCondition_FileWrite",
+    "File": "exp3/pocket_ledger/database/database.py",
+    "Line": "31",
+    "At": "Loading whole DB into memory and writing full JSON without locks"
+  },
+  "4": {
+    "CWE": "CWE-398",
+    "name": "SilentDataLossOnParseError",
+    "File": "exp3/pocket_ledger/database/database.py",
+    "Line": "42",
+    "At": "JSON parse failure falls back to empty DB without backup"
+  },
+  "5": {
+    "CWE": "CWE-754",
+    "name": "UncheckedTimestampParsing",
+    "File": "exp3/pocket_ledger/database/database.py",
+    "Line": "179",
+    "At": "datetime.fromisoformat on possibly malformed/absent timestamp"
+  },
+  "6": {
+    "CWE": "CWE-254",
+    "name": "MissingReferentialChecksOnDelete",
+    "File": "exp3/pocket_ledger/database/database.py",
+    "Line": "154",
+    "At": "delete_category/tag does not check for existing references"
+  },
+  "7": {
+    "CWE": "CWE-20",
+    "name": "LackOfBusinessValidation",
+    "File": "exp3/pocket_ledger/app_logic.py",
+    "Line": "64",
+    "At": "add_entry does not validate amount/title/note strictly"
+  },
+  "8": {
+    "CWE": "CWE-285",
+    "name": "MissingOwnershipCheck",
+    "File": "exp3/pocket_ledger/app_logic.py",
+    "Line": "178",
+    "At": "add_tag_to_entry does not check entry/tag ownership"
+  },
+  "9": {
+    "CWE": "CWE-754",
+    "name": "MultiCurrencyIgnored",
+    "File": "exp3/pocket_ledger/services/stat_engine.py",
+    "Line": "42",
+    "At": "calculate_total_by_type ignores entry.currency when summing"
+  },
+  "10": {
+    "CWE": "CWE-755",
+    "name": "ExportRobustness",
+    "File": "exp3/pocket_ledger/services/export_service.py",
+    "Line": "35",
+    "At": "export_to_xlsx assumes fields like entry.images are lists and non-null"
+  }
+}

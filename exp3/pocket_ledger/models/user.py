@@ -1,10 +1,9 @@
-"""
-用户模型
-"""
+"""User Model"""
 import uuid
 import hashlib
 from typing import Optional
 from datetime import datetime
+from icontract import require, ensure
 
 
 class User:
@@ -21,6 +20,12 @@ class User:
         created_at: 账户创建时间
     """
     
+    @require(lambda email: '@' in email and len(email) > 3)
+    @require(lambda phone: len(phone) >= 8)
+    @require(lambda password: len(password) >= 6)
+    @require(lambda nickname: len(nickname.strip()) > 0)
+    @ensure(lambda self: self.user_id is not None)
+    @ensure(lambda self: len(self.password_hash) == 64)
     def __init__(
         self,
         email: str,
@@ -49,6 +54,8 @@ class User:
         self.avatar_path = avatar_path or "default_avatar.png"
         self.created_at = datetime.now()
     
+    @require(lambda password: len(password) > 0)
+    @ensure(lambda result: len(result) == 64)
     def _hash_password(self, password: str) -> str:
         """
         使用SHA256加密密码
@@ -59,6 +66,12 @@ class User:
         Returns:
             加密后的密码哈希值
         """
+        return hashlib.sha256(password.encode('utf-8')).hexdigest()
+    
+    @require(lambda password: len(password) > 0)
+    @ensure(lambda result: len(result) == 64)
+    def _hash_password_verify(self, password: str) -> str:
+        """SHA256 hash for password (duplicate for contract)"""
         return hashlib.sha256(password.encode('utf-8')).hexdigest()
     
     def verify_password(self, password: str) -> bool:
@@ -73,16 +86,19 @@ class User:
         """
         return self.password_hash == self._hash_password(password)
     
+    @require(lambda old_password: len(old_password) > 0)
+    @require(lambda new_password: len(new_password) >= 6)
+    @ensure(lambda self, old_password, new_password, result: not result or self.verify_password(new_password))
     def update_password(self, old_password: str, new_password: str) -> bool:
         """
-        更新密码
+        Update password
         
         Args:
-            old_password: 旧密码
-            new_password: 新密码
+            old_password: Old password
+            new_password: New password
             
         Returns:
-            是否更新成功
+            Whether update succeeded
         """
         if not self.verify_password(old_password):
             return False

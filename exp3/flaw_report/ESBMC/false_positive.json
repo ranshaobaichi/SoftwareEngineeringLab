@@ -1,0 +1,9 @@
+{
+  "1": {
+    "CWE": "CWE-659",
+    "name": "NoFalsePositives",
+    "File": "",
+    "Line": "",
+    "At": "CrossHair reported no spurious counterexamples for model invariants (no false positives found)"
+  }
+}
