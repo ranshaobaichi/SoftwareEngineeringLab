@@ -1,31 +1,61 @@
+# =========================
+# 工作流名称
+# =========================
 name: PocketLedger CI
 
+# =========================
+# 工作流触发条件
+# =========================
+# 当以下事件发生时，自动触发 CI 流程：
+# 1. 向 main 或 master 分支推送代码（push）
+# 2. 向 main 或 master 分支发起 Pull Request
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
 
+# =========================
+# CI 任务定义
+# =========================
 jobs:
   test:
+    # 指定 CI 运行环境
+    # 使用 GitHub 提供的最新 Ubuntu 虚拟机
     runs-on: ubuntu-latest
 
+    # =========================
+    # CI 执行步骤
+    # =========================
     steps:
+      # Step 1：检出代码仓库
+      # 将 GitHub 仓库中的代码拉取到 CI 运行环境中
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2：设置 Python 运行环境
+      # 指定 Python 版本为 3.12
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
+      # Step 3：安装项目依赖
+      # 由于本仓库包含多个实验目录，
+      # 实际项目位于 exp3 目录下，因此需要先进入 exp3
       - name: Install dependencies
         run: |
           cd exp3
+          # 升级 pip
           python -m pip install --upgrade pip
+          # 安装项目依赖
           pip install -r requirements.txt
+          # 安装测试与分析工具
           pip install pytest pytest-cov hypothesis icontract
 
+      # Step 4：运行测试用例
+      # 在 exp3 目录下执行 pytest，
+      # 自动运行单元测试、集成测试和模糊测试
       - name: Run tests
         run: |
           cd exp3

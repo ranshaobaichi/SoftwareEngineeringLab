@@ -2,8 +2,8 @@
 统计引擎 - 处理数据统计和分析
 """
 import uuid
-from typing import List, Dict, Optional, Tuple
-from datetime import datetime, timedelta
+from typing import List, Dict, Optional, Tuple, Any
+from datetime import datetime, timedelta, time
 from decimal import Decimal
 from collections import defaultdict
 
@@ -169,52 +169,67 @@ class StatEngine:
         user_id: uuid.UUID,
         start_date: datetime,
         end_date: datetime
-    ) -> List[Dict[str, any]]:
+    ) -> List[Dict[str, Any]]:
         """
         获取每日统计
-        
-        Args:
-            user_id: 用户ID
-            start_date: 起始日期
-            end_date: 结束日期
-            
-        Returns:
-            每日统计列表 [{日期, 收入, 支出, 平衡}]
+
+        注意：
+        - 本方法按“日期”维度统计，因此会将查询范围归一化到整天：
+          start_date 当天 00:00:00 到 end_date 当天 23:59:59.999999
+        - 对于非 INCOME/EXPENSE 的分类类型，默认忽略（避免误计为支出）。
         """
+        if start_date is None or end_date is None:
+            raise ValueError("start_date 和 end_date 不能为空")
+        if start_date > end_date:
+            raise ValueError("start_date 不能晚于 end_date")
+
+        # 归一化为整天范围，避免结束日因时间为 00:00:00 等导致漏数据
+        start_dt = datetime.combine(start_date.date(), time.min, tzinfo=start_date.tzinfo)
+        end_dt = datetime.combine(end_date.date(), time.max, tzinfo=end_date.tzinfo)
+
         entries = self.database.query_entries(
             user_id=user_id,
-            start_date=start_date,
-            end_date=end_date
-        )
-        
-        # 按日期汇总
+            start_date=start_dt,
+            end_date=end_dt
+        ) or []
+
         daily_stats = defaultdict(lambda: {
             'income': Decimal('0'),
             'expense': Decimal('0')
         })
-        
+
         for entry in entries:
+            # 防御式：避免异常数据导致崩溃
+            if entry is None or entry.timestamp is None or entry.category is None:
+                continue
+
             date_key = entry.timestamp.date()
-            if entry.category.type == CategoryType.INCOME:
+            ctype = getattr(entry.category, "type", None)
+
+            if ctype == CategoryType.INCOME:
                 daily_stats[date_key]['income'] += entry.amount
-            else:
+            elif ctype == CategoryType.EXPENSE:
                 daily_stats[date_key]['expense'] += entry.amount
-        
-        # 转换为列表
-        result = []
-        current_date = start_date.date()
-        end_date_only = end_date.date()
-        
+            else:
+                # 未知类型：忽略（也可以改为 raise 或记录日志）
+                continue
+
+        result: List[Dict[str, Any]] = []
+        current_date = start_dt.date()
+        end_date_only = end_dt.date()
+
         while current_date <= end_date_only:
             stats = daily_stats[current_date]
+            income = stats['income']
+            expense = stats['expense']
             result.append({
                 'date': current_date.isoformat(),
-                'income': float(stats['income']),
-                'expense': float(stats['expense']),
-                'balance': float(stats['income'] - stats['expense'])
+                'income': float(income),
+                'expense': float(expense),
+                'balance': float(income - expense)
             })
             current_date += timedelta(days=1)
-        
+
         return result
     
     def get_monthly_statistics(

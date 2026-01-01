@@ -242,61 +242,122 @@ class Database:
         keyword: Optional[str] = None
     ) -> List[Entry]:
         """
-        查询账目条目
-        
-        Args:
-            user_id: 用户ID过滤
-            category_id: 分类ID过滤
-            tag_ids: 标签ID列表过滤
-            start_date: 起始日期过滤
-            end_date: 结束日期过滤
-            min_amount: 最小金额过滤
-            max_amount: 最大金额过滤
-            keyword: 关键词搜索(标题或备注)
-            
-        Returns:
-            符合条件的条目列表
+        查询账目条目（带输入校验）
+
+        设计原则：
+        - 对“参数组合明显不合法”的情况（如 start_date > end_date）直接抛 ValueError，避免静默返回空结果。
+        - 对存量数据中单条记录字段异常（如 timestamp 无法解析）采取跳过，避免整个查询崩溃。
         """
-        results = []
-        
+        # -------- 参数校验 / 归一化（建议放在最前面） --------
+        if start_date is not None and not isinstance(start_date, datetime):
+            raise TypeError("start_date 必须是 datetime 或 None")
+        if end_date is not None and not isinstance(end_date, datetime):
+            raise TypeError("end_date 必须是 datetime 或 None")
+
+        if start_date is not None and end_date is not None and start_date > end_date:
+            raise ValueError("start_date 不能晚于 end_date")
+
+        # 时区一致性：避免 naive/aware datetime 比较触发 TypeError
+        # 约束：若 start/end 任一为 aware，则另一者也必须为 aware；并且后续 entry_time 也必须可比较
+        if start_date is not None and end_date is not None:
+            start_aware = start_date.tzinfo is not None
+            end_aware = end_date.tzinfo is not None
+            if start_aware != end_aware:
+                raise ValueError("start_date 和 end_date 的 tzinfo 必须一致（要么都带时区，要么都不带）")
+
+        # 金额参数：允许 Decimal / int / float / str 等可转换值，统一转为 Decimal
+        def _to_decimal(x, name: str) -> Optional[Decimal]:
+            if x is None:
+                return None
+            if isinstance(x, Decimal):
+                return x
+            try:
+                # 用 str 包一层，避免 float 二进制表示直接进 Decimal
+                return Decimal(str(x))
+            except Exception as e:
+                raise TypeError(f"{name} 无法转换为 Decimal: {e}")
+
+        min_amount = _to_decimal(min_amount, "min_amount")
+        max_amount = _to_decimal(max_amount, "max_amount")
+        if min_amount is not None and max_amount is not None and min_amount > max_amount:
+            raise ValueError("min_amount 不能大于 max_amount")
+
+        # keyword：空字符串视为未提供
+        if keyword is not None:
+            if not isinstance(keyword, str):
+                raise TypeError("keyword 必须是 str 或 None")
+            keyword = keyword.strip()
+            if keyword == "":
+                keyword = None
+
+        results: List[Entry] = []
+
         for entry_data in self.data['entries'].values():
-            # 用户ID过滤
-            if user_id and entry_data['user_id'] != str(user_id):
+            # -------- 用户ID过滤 --------
+            if user_id and entry_data.get('user_id') != str(user_id):
                 continue
-            
-            # 分类ID过滤
-            if category_id and entry_data['category']['category_id'] != str(category_id):
-                continue
-            
-            # 标签过滤
+
+            # -------- 分类ID过滤 --------
+            if category_id:
+                cat = entry_data.get('category') or {}
+                if cat.get('category_id') != str(category_id):
+                    continue
+
+            # -------- 标签过滤（任一匹配即可）--------
             if tag_ids:
-                entry_tag_ids = [tag['tag_id'] for tag in entry_data.get('tags', [])]
+                entry_tag_ids = [tag.get('tag_id') for tag in entry_data.get('tags', []) if isinstance(tag, dict)]
+                # entry_tag_ids 里可能有 None，直接用 membership 判断即可
                 if not any(str(tag_id) in entry_tag_ids for tag_id in tag_ids):
                     continue
-            
-            # 日期过滤
-            entry_time = datetime.fromisoformat(entry_data['timestamp'])
-            if start_date and entry_time < start_date:
+
+            # -------- 日期过滤 --------
+            ts = entry_data.get('timestamp')
+            if not ts:
+                # 脏数据：没有时间戳，跳过
                 continue
-            if end_date and entry_time > end_date:
+            try:
+                entry_time = datetime.fromisoformat(ts)
+            except ValueError:
+                # 脏数据：timestamp 非法，跳过（也可改为 raise）
                 continue
-            
-            # 金额过滤
-            entry_amount = Decimal(entry_data['amount'])
-            if min_amount and entry_amount < min_amount:
-                continue
-            if max_amount and entry_amount > max_amount:
-                continue
-            
-            # 关键词搜索
-            if keyword:
-                keyword_lower = keyword.lower()
-                if (keyword_lower not in entry_data['title'].lower() and
-                    keyword_lower not in entry_data.get('note', '').lower()):
+
+            # 若查询条件是 aware datetime，但 entry_time 是 naive（或反之），比较会 TypeError
+            if start_date is not None:
+                if (start_date.tzinfo is not None) != (entry_time.tzinfo is not None):
+                    # 数据与条件时区形态不一致：跳过该条（也可改为 raise，视项目策略）
                     continue
-            
+                if entry_time < start_date:
+                    continue
+            if end_date is not None:
+                if (end_date.tzinfo is not None) != (entry_time.tzinfo is not None):
+                    continue
+                if entry_time > end_date:
+                    continue
+
+            # -------- 金额过滤 --------
+            amt_raw = entry_data.get('amount')
+            if amt_raw is None:
+                continue
+            try:
+                entry_amount = Decimal(str(amt_raw))
+            except Exception:
+                continue
+
+            if min_amount is not None and entry_amount < min_amount:
+                continue
+            if max_amount is not None and entry_amount > max_amount:
+                continue
+
+            # -------- 关键词搜索（标题或备注）--------
+            if keyword:
+                title = (entry_data.get('title') or "")
+                note = (entry_data.get('note') or "")
+                keyword_lower = keyword.lower()
+                if (keyword_lower not in title.lower() and keyword_lower not in note.lower()):
+                    continue
+
             results.append(Entry.from_dict(entry_data))
-        
+
         # 按时间倒序排序
         results.sort(key=lambda e: e.timestamp, reverse=True)
         return results
